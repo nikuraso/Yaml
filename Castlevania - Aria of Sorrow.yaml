@@ -1,0 +1,306 @@
+﻿# Q. What is this file?
+# A. This file contains options which allow you to configure your multiworld experience while allowing
+#    others to play how they want as well.
+#
+# Q. How do I use it?
+# A. The options in this file are weighted. This means the higher number you assign to a value, the
+#    more chances you have for that option to be chosen. For example, an option like this:
+#
+#    map_shuffle:
+#      on: 5
+#      off: 15
+#
+#    Means you have 5 chances for map shuffle to occur, and 15 chances for map shuffle to be turned
+#    off.
+#
+# Q. I've never seen a file like this before. What characters am I allowed to use?
+# A. This is a .yaml file. You are allowed to use most characters.
+#    To test if your yaml is valid or not, you can use this website:
+#        http://www.yamllint.com/
+#    You can also verify that your Archipelago options are valid at this site:
+#        https://archipelago.gg/check
+
+# Your name in-game, limited to 16 characters.
+#     {player} will be replaced with the player's slot number.
+#     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
+#     {number} will be replaced with the counter value of the name.
+#     {NUMBER} will be replaced with the counter value of the name, if the counter value is greater than 1.
+name: NIKU{number}
+
+# Used to describe your yaml. Useful if you have multiple files.
+description: Default Castlevania - Aria of Sorrow Template
+
+game: Castlevania - Aria of Sorrow
+requires:
+  version: 0.6.7 # Version of Archipelago required for this yaml to work as expected.
+  game:
+    Castlevania - Aria of Sorrow: 2026.7.3 # Version of the world required for this yaml to work as expected.
+
+Castlevania - Aria of Sorrow:
+  ################
+  # Game Options #
+  ################
+  progression_balancing:
+    # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
+    # 
+    # A lower setting means more getting stuck. A higher setting means less getting stuck.
+    #
+    # You can define additional values between the minimum and maximum values.
+    # Minimum value is 0
+    # Maximum value is 99
+    random: 0
+    random-low: 0 # random value weighted towards lower values
+    random-high: 0 # random value weighted towards higher values
+    random-range-0-99: 0 # random value between 0 and 99
+    disabled: 0 # equivalent to 0
+    normal: 50 # equivalent to 50
+    extreme: 0 # equivalent to 99
+
+  accessibility:
+    # Set rules for reachability of your items/locations.
+    # 
+    # **Full:** ensure everything can be reached and acquired.
+    # 
+    # **Minimal:** ensure what is needed to reach your goal can be acquired.
+    # 
+    # **Items:** ensure all logically relevant items can be acquired. Some items, such as keys, may be self-locking, and
+    # some locations may be inaccessible.
+    full: 0
+    minimal: 0
+    items: 50
+
+  randomize_pickups:
+    # Adds the one-time on-the-ground pickups to the randomization pool.
+    'false': 0
+    'true': 50
+
+  goal:
+    # The win condition.
+    # 
+    # - chaos: defeat Chaos form two.
+    # - graham: defeat Graham (with any equipment).
+    chaos: 50
+    graham: 0
+
+  hard_mode:
+    # Turns on Hard Mode (the client forces the relevant nibble).
+    # 
+    # Shuffles the game's Hard Mode pickups (Kaiser Knuckle, Death's Sickle, Death's Robe,
+    #    Silver Gun, Tear of Blood). The game only spawns those five in Hard Mode, so when this is
+    #    off they are excluded from the location pool and item pool entirely.
+    # 
+    # Makes enemies take less damage.
+    # 
+    # Ostensibly makes unearned souls easier to obtain.
+    'false': 50
+    'true': 0
+
+  skull_key_warp:
+    # Turns the Skull Key into a warp item: using it from the Consumables menu teleports Soma to the
+    #    starting room.
+    'false': 0
+    'true': 50
+
+  forbidden_area_button:
+    # How the Forbidden Area (gate at the bottom of the Study) is unlocked.
+    # 
+    # The Forbidden Area can normally not be accessed _first_ through the Study due to a metal
+    #     barrier that a button on the other side opens.
+    # 
+    # This option replaces the button with a shufflable pickup.
+    # 
+    # - off: the button is present in A01 and opens the barrier when pressed.
+    # - pickup: the button is removed and the unlock becomes a shuffled "Study Sealswitch" pickup.
+    'off': 0
+    pickup: 50
+
+  death_link:
+    # When you die, everyone who enabled death link dies. Of course, the reverse is true too.
+    'false': 50
+    'true': 0
+
+  ##################
+  # Item Smoothing #
+  ##################
+  item_smoothing:
+    # **This is the flag to turn off if you want a totally-random-yet-finishable run.**
+    # 
+    # Biases item placement so less-desirable items show up earlier and more-desirable ones later,
+    #    using community tier-list data (data/item_balancing). Progression items are never moved by
+    #    this; the three Ancient Books are spread across early/mid/late instead of treated as junk.
+    # 
+    # - off: vanilla placement -- any item can appear anywhere.
+    # - loose: gentle escalation with wide, long-tailed luck (more surprises, lucky early finds).
+    # - strict: stronger escalation with tighter placement (fewer surprises).
+    'off': 0
+    loose: 0
+    strict: 50
+
+  item_smoothing_order:
+    # No effect when Item Smoothing is off.
+    # 
+    # Explanation:
+    # 
+    # When Item Smoothing is on:
+    #     option_spheres = good stuff generally appears later in the run
+    #     option_map_distance = good stuff generally appears in later original-game spots
+    # 
+    # For example: does Claimh Solais (a very strong weapon) show up later in the run (spheres),
+    #     or in a spot that would be accessed late in the original game (map_distance)?
+    # 
+    # 
+    # We default to "option_map_distance" to make sure you can find good stuff if forced into a 
+    #     hard area.
+    # 
+    # Note that this does not affect progression item placement, which is handled separately.
+    # 
+    # Options:
+    # 
+    # - spheres: logical reachability order, measured after randomization -- how deep into *this
+    #   seed's* progression a location actually sits. Seed-specific.
+    # - map_distance: structural distance from the start in the unrandomized map (the region graph),
+    #   ignoring access rules and randomization. Seed-independent: a room is always "as early"
+    #   regardless of where progression landed.
+    spheres: 0
+    map_distance: 50
+
+  early_mobility_souls:
+    # No effect when Item Smoothing is off.
+    # 
+    # When Item Smoothing is on, how the three vertical mobility souls (Malphas/DJump, Hippogryph, and
+    #    Giant bat) are placed. They gate movement, so this is a separate axis from item desirability.
+    # 
+    # - off: no special handling -- the souls place like any other progression item.
+    # - bias_early: ~93% of seeds pull one mobility soul (usually double jump) into the first third of
+    #   the run, while the heavier flight souls stay late; the rest leave all three late.
+    # - guarantee_early: always pull one mobility soul early, so you never start fully mobility-starved.
+    'off': 0
+    bias_early: 50
+    guarantee_early: 0
+
+  black_panther_bias:
+    # No effect when Item Smoothing is off.
+    # 
+    # When Item Smoothing is on:
+    #    On: bias Black Panther (dash) to show up early: ~80% of seeds place it in
+    #       roughly the first half of the run (by seed/sphere ordering); the rest leave it to normal
+    #       placement.
+    #    Off: Black Panther places like any other progression item.
+    'false': 0
+    'true': 50
+
+  ####################
+  # Logic Difficulty #
+  ####################
+  logic_difficulty_preset:
+    # How much execution skill the logic may expect, beyond having the right souls.
+    # Each tier includes the ones below it.
+    # 
+    # - canonical: developer-intended routes only.
+    # - standard: may expect kickable-enemy launches.
+    # - advanced: may also expect platform clips.
+    # - expert: may also expect pixel-perfect platforming.
+    # 
+    # Quick-save resets are never expected; see Quick-Save Reset Logic.
+    # Each technique can be forced in or out of logic with its own option.
+    canonical: 50
+    standard: 0
+    advanced: 0
+    expert: 0
+
+  kickable_enemy_logic:
+    # Whether logic may require launching off a kickable enemy.
+    # inherit: in logic from Standard difficulty up.
+    inherit: 50
+    in_logic: 0
+    out_of_logic: 0
+
+  platform_clip_logic:
+    # Whether logic may require clipping the edge of platforms.
+    # inherit: in logic from Advanced difficulty up.
+    inherit: 50
+    in_logic: 0
+    out_of_logic: 0
+
+  pixel_perfect_logic:
+    # Whether logic may require pixel-perfect platforming.
+    # inherit: in logic at Expert difficulty.
+    inherit: 50
+    in_logic: 0
+    out_of_logic: 0
+
+  quick_save_reset_logic:
+    # Whether logic may require a quick save + reset, which respawns Soma at the room
+    # entrance. No difficulty expects this; it is in logic only if set to in_logic.
+    inherit: 50
+    in_logic: 0
+    out_of_logic: 0
+
+  ###################
+  # Gameplay Tweaks #
+  ###################
+  single_jump_divekick:
+    # Allows the divekick out of a first jump, before Malphas (Double Jump) is owned.
+    #    Still disallowed in water without Skula.
+    #    (From Xanthus's public AoS patch collection.)
+    'false': 0
+    'true': 50
+
+  classicvania_movement:
+    # NES-style movement with no air control: jump trajectory is committed on takeoff, and walking
+    #    off a ledge drops nearly straight down. Direction can still be changed with Malphas (Double
+    #    Jump) or Hippogryph, and the flight souls (Flying Armor, Giant Bat) keep normal air control.
+    #    (From Xanthus's public AoS patch collection.)
+    'false': 50
+    'true': 0
+
+  oops_all_whips:
+    # Every weapon attacks with the Whip Sword's swing animation.
+    #    (From Xanthus's public AoS patch collection.)
+    # 
+    # WARNING this can technically softlock if you don't get an ability that lets you break the
+    #     ground. In practice, this is unlikely to the point of ignoring it, but there is a
+    #     chance you'll have to find a soul to let you hit the ground.
+    # 
+    # Weapon stats are untouched, but effective reach follows the whip swing.
+    'false': 50
+    'true': 0
+
+  ###########################
+  # Item & Location Options #
+  ###########################
+  local_items:
+    # Forces these items to be in their native world.
+    []
+
+  non_local_items:
+    # Forces these items to be outside their native world.
+    []
+
+  start_inventory:
+    # Start with the specified amount of these items. Example: "Bomb: 1"
+    {}
+
+  start_hints:
+    # Start with these item's locations prefilled into the ``!hint`` command.
+    []
+
+  start_location_hints:
+    # Start with these locations and their item prefilled into the ``!hint`` command.
+    []
+
+  exclude_locations:
+    # Prevent these locations from having an important item.
+    []
+
+  priority_locations:
+    # Prevent these locations from having an unimportant item.
+    []
+
+  item_links:
+    # Share part of your item pool with other players.
+    []
+
+  plando_items:
+    # Generic items plando.
+    []
